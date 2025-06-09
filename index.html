@@ -3,159 +3,167 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Frog Appreciation</title>
+  <title>Frog Shrine 🐸 + Facts</title>
   <style>
+    :root {
+      --green: #6fcf97;
+      --light: #eaffea;
+      --dark: #1d4731;
+      --frame: #daf5dc;
+      --accent: #a3e1b0;
+    }
     body {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background-color: #d1f7d6;
-      color: #2a2a2a;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin: 0; padding: 1rem;
+      background: linear-gradient(to bottom, var(--light), #c7f3d4);
+      font-family: 'Segoe UI', sans-serif;
+      color: var(--dark);
       text-align: center;
-      min-height: 100vh;
-      box-sizing: border-box;
     }
     h1 {
-      margin-top: 1rem;
-      color: #417c4f;
-    }
-    #gif-container {
-      margin: 1rem auto;
-      max-width: 100%;
-      height: auto;
-    }
-    #gif {
-      max-width: 90vw;
-      max-height: 60vh;
-      border: 5px solid #4caf50;
+      font-size: 2rem;
+      background: var(--accent);
+      padding: 1rem 1.5rem;
       border-radius: 12px;
-      transition: opacity 0.6s ease-in-out;
+      margin-bottom: 1rem;
+      display: inline-block;
+      box-shadow: 2px 4px 0 var(--green);
     }
-    .show {
-      opacity: 1;
+    .frame {
+      background: var(--frame);
+      border: 6px solid var(--green);
+      border-radius: 20px;
+      padding: 1rem;
+      display: inline-block;
+      max-width: 90vw;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
-    #gif:not(.show) {
-      opacity: 0;
+    img {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 12px;
+      transition: opacity 0.8s ease-in-out;
     }
     #fact {
-      margin: 1rem;
-      font-size: 1.2rem;
-      color: #1e5b3b;
+      margin: 1rem auto;
+      font-style: italic;
+      max-width: 85%;
+      font-size: 1.05rem;
     }
     #controls {
       display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
     }
-    #next, label {
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: #4caf50;
+    button, label {
+      background: var(--green);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 10px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.1rem;
       cursor: pointer;
     }
-    #next:hover {
-      background-color: #388e3c;
+    button:hover {
+      background: #58bd80;
     }
-    @media (max-width: 600px) {
-      #fact {
-        font-size: 1rem;
-        padding: 0.5rem;
-      }
-      h1 {
-        font-size: 1.4rem;
-      }
+    input[type=checkbox] {
+      margin-right: 0.5rem;
+      transform: scale(1.3);
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--dark);
     }
   </style>
 </head>
 <body>
-  <h1>It’s okay if all you did today was look at frogs on the internet 🐸</h1>
-  <div id="gif-container">
-    <img id="gif" class="show" src="" alt="Random Frog" />
+  <h1>🐸 It’s okay if all you did today was look at frogs on the internet 🐸</h1>
+  <div class="frame">
+    <img id="frogImage" src="" alt="Frog Image" />
   </div>
-  <div id="fact">Loading frog fact...</div>
+  <div id="fact">Loading a frog fact...</div>
   <div id="controls">
-    <button id="next">Next Frog</button>
-    <label><input type="checkbox" id="auto" /> Auto advance</label>
+    <button id="next">Next Frog!</button>
+    <label><input type="checkbox" id="autoAdvance"> Auto-Hop 🐸</label>
   </div>
+  <footer>Made with 💚 – Frog Shrine</footer>
 
-  <script src="frog_facts.js"></script>
   <script>
-    const TENOR_KEY = 'LIVDSRZULELA';
-    const QUERIES = ['frog','cute frog','funny frog','baby frog','green frog','frog cartoon','frog smile','frog hopping','frog meme','frog relaxing'];
-    const LIMIT = 50;
-    const gifEl = document.getElementById('gif');
-    const factEl = document.getElementById('fact');
-    const btn = document.getElementById('next');
-    const autoCheckbox = document.getElementById('auto');
-    let gifs = [], idx = 0, autoId = null;
+    const staticImages = [
+      "https://upload.wikimedia.org/wikipedia/commons/2/20/Red_eyed_tree_frog_edit2.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/e/e4/Golden_Poison_Frog_-_Phyllobates_terribilis.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/6/6b/Glassfrog_Costa_Rica_crop.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/f2/Bullfrog_-_cropped.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/3/3d/Green_tree_frog.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/d/d7/Wood_Frog.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/3/33/Frog_on_leaf02.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/b/b4/Frog_in_Borneo.jpg",
+      "https://media.tenor.com/qY4ZrMn0f78AAAAC/cute-frog.gif",
+      "https://media.tenor.com/YTQxtvdFhzYAAAAC/jumping-frog.gif"
+    ];
 
-    let factQueue = [...frogFacts];
-    function shuffle(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
+    const frogFacts = [
+      "Frogs can breathe through their skin. (Source: National Geographic, 2020)",
+      "Wood frogs survive freezing for weeks. (Source: Smithsonian, 2018)",
+      "Goliath frogs grow up to 12.5 inches. (Source: BBC Earth, 2017)",
+      "Some frogs care for their tadpoles in their mouths! (Source: Nature, 2014)",
+      "Frogs existed before dinosaurs. (Source: National Geographic, 2019)",
+      "The golden poison dart frog is one of the most toxic animals. (Source: Live Science, 2020)",
+      "Frog eyes push food down their throat. (Source: Discover Magazine, 2015)",
+      "Glass frogs have translucent skin. (Source: Encyclopedia of Life, 2022)",
+      "Male Darwin’s frogs carry young in their vocal sacs. (Source: BBC Nature, 2016)",
+      "Frogs' calls can be heard up to a mile away. (Source: National Wildlife Federation, 2018)"
+    ];
+
+    let index = 0;
+    const imgEl = document.getElementById("frogImage");
+    const factEl = document.getElementById("fact");
+    const btn = document.getElementById("next");
+    const auto = document.getElementById("autoAdvance");
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+        [array[i], array[j]] = [array[j], array[i]];
       }
     }
 
-    function nextFact() {
-      if (factQueue.length === 0) {
-        factQueue = [...frogFacts];
-        shuffle(factQueue);
-      }
-      return factQueue.pop();
-    }
+    shuffle(staticImages);
+    shuffle(frogFacts);
 
-    async function fetchGifs(query) {
-      const url = `https://g.tenor.com/v1/search?q=${encodeURIComponent(query)}&key=${TENOR_KEY}&limit=${LIMIT}`;
-      const res = await fetch(url);
-      const json = await res.json();
-      return json.results.map(r => r.media[0].gif.url);
-    }
-
-    async function loadAll() {
-      const sets = await Promise.all(QUERIES.map(q => fetchGifs(q)));
-      gifs = [...new Set(sets.flat())];
-      shuffle(gifs);
-      shuffle(factQueue);
-      idx = 0;
-      nextSlide();
-    }
-
-    function nextSlide() {
-      if (!gifs.length) return;
-      gifEl.classList.remove('show');
-      factEl.textContent = '';
+    function nextFrog() {
+      imgEl.style.opacity = 0;
       setTimeout(() => {
-        gifEl.src = gifs[idx % gifs.length];
-        idx++;
-        gifEl.onload = () => {
-          gifEl.classList.add('show');
-          factEl.textContent = nextFact();
+        index = (index + 1) % staticImages.length;
+        imgEl.src = staticImages[index];
+        factEl.textContent = frogFacts[index % frogFacts.length];
+        imgEl.onload = () => {
+          imgEl.style.opacity = 1;
         };
       }, 300);
     }
 
-    function startAuto() {
-      if (autoId) clearInterval(autoId);
-      autoId = setInterval(nextSlide, 6000);
-    }
+    btn.addEventListener("click", nextFrog);
 
-    function stopAuto() {
-      clearInterval(autoId);
-      autoId = null;
-    }
+    let intervalId = null;
+    auto.addEventListener("change", () => {
+      if (auto.checked) {
+        intervalId = setInterval(nextFrog, 5000);
+      } else {
+        clearInterval(intervalId);
+      }
+    });
 
-    btn.addEventListener('click', nextSlide);
-    autoCheckbox.addEventListener('change', () => autoCheckbox.checked ? startAuto() : stopAuto());
-
-    loadAll().catch(console.error);
+    // Initialize with first frog
+    window.onload = () => {
+      index = Math.floor(Math.random() * staticImages.length);
+      imgEl.src = staticImages[index];
+      factEl.textContent = frogFacts[index % frogFacts.length];
+      imgEl.style.opacity = 1;
+    };
   </script>
 </body>
 </html>
